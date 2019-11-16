@@ -2,8 +2,9 @@
 A simple "tic tac toe" game, written in python!
 
 How do the columns and rows work?
-  
-  0 1 2
+
+
+# 0 1 2
 0 - - -
 1 - - -
 2 - - -
