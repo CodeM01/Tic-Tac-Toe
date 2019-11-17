@@ -8,14 +8,14 @@ def add_symbol(symbol, position):
     board[row][column] = symbol
 
 def check_horizontal(symbol):
-    rows = {0: True, 1: True, 2: True}
+    dictionary = {0: True, 1: True, 2: True}
 
     for row_index in range(len(board)):
         row = board[row_index]
         for tile_index in range(len(row)):
             tile = row[tile_index]
             if tile != symbol:
-                rows[row_index] = False
+                dictionary[row_index] = False
 
     return dictionary[0] or dictionary[1] or dictionary[2]
 
@@ -23,15 +23,14 @@ def check_horizontal(symbol):
 def check_diagonal(symbol):
     left = right = True
 
-    for row in board:
-      for x in range(len(row)):
-        left, right = x, -x-1
+    for x in range(len(board)):
+      left_diagonal, right_diagonal = x, -x-1
 
-        if row[left] != symbol:
-          left = False
+      if board[x][left_diagonal] != symbol:
+        left = False
 
-        if row[right] != symbol:
-          right = False
+      if board[x][right_diagonal] != symbol:
+        right = False
 
     return left or right
 
@@ -45,9 +44,18 @@ def check_vertical(symbol):
 
     return dictionary[0] or dictionary[1] or dictionary[2]
 
-
 def display_board():
     for row in board: print(row)
+
+def check_full():
+  not_full = True
+
+  for row in board:
+    for tile in row:
+      if tile == "-":
+        not_full = False
+  
+  return not_full
 
 while True:
     player_one_symbol = input("player one's symbol: ")
@@ -85,12 +93,17 @@ while True:
                 vertical = check_vertical(symbol)
                 horizontal = check_horizontal(symbol)
                 diagonal = check_diagonal(symbol)
+                is_full = check_full()
+
+                print(diagonal)
 
                 if vertical or horizontal or diagonal:
-                    print(player + " won!")
-                    sys.exit()
+                  print(player + " won!")
+                  sys.exit()
+                elif is_full:
+                  print("Nobody Won!")
+                  sys.exit()
                 else:
                   break
-
             else:
                 print("Your opponent has already picked this tile! Pick again...")
