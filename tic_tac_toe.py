@@ -86,7 +86,6 @@ while True:
               print("Not a valid row or column! Pick again...")
               continue
 
-
             if board[row][column] == "-":
                 add_symbol(symbol, [row, column])
                 display_board()
