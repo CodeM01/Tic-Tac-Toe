@@ -11,10 +11,8 @@ def check_horizontal(symbol):
     dictionary = {0: True, 1: True, 2: True}
 
     for row_index in range(len(board)):
-        row = board[row_index]
-        for tile_index in range(len(row)):
-            tile = row[tile_index]
-            if tile != symbol:
+        for tile_index in range(len(board[row_index])):
+            if board[row_index][tile_index] != symbol:
                 dictionary[row_index] = False
 
     return dictionary[0] or dictionary[1] or dictionary[2]
@@ -23,13 +21,13 @@ def check_horizontal(symbol):
 def check_diagonal(symbol):
     left = right = True
 
-    for x in range(len(board)):
-      left_diagonal, right_diagonal = x, -x-1
+    for row_index in range(len(board)):
+      left_diagonal, right_diagonal = row_index, -row_index-1
 
-      if board[x][left_diagonal] != symbol:
+      if board[row_index][left_diagonal] != symbol:
         left = False
-
-      if board[x][right_diagonal] != symbol:
+        
+      if board[row_index][right_diagonal] != symbol:
         right = False
 
     return left or right
@@ -38,9 +36,9 @@ def check_vertical(symbol):
     dictionary = {0: True, 1: True, 2: True}
 
     for row in board:
-        for x in range(3):
-          if row[x] != symbol:
-              dictionary[x] = False
+        for tile_index in range(3):
+          if row[tile_index] != symbol:
+              dictionary[tile_index] = False
 
     return dictionary[0] or dictionary[1] or dictionary[2]
 
@@ -57,18 +55,13 @@ def check_full():
   
   return not_full
 
-while True:
-    player_one_symbol = input("player one's symbol: ")
-    player_one_name = input("player one's name: ")
-    player_two_symbol = input("player two's symbol: ")
-    player_two_name = input("player two's name: ")
 
-    if player_one_symbol != player_two_symbol:
-        players = {player_one_symbol: player_one_name, player_two_symbol: player_two_name}
-        break
-    else:
-        print("You cannot have the same symbol, pick again!")
+player_one_name = input("player one's name: ")
+player_two_name = input("player two's name: ")
+print(player_one_name + " will be X")
+print(player_two_name + " will be O\n")
 
+players = {"X": player_one_name, "O": player_two_name}
 display_board()
 
 while True:
@@ -86,23 +79,27 @@ while True:
               print("Not a valid row or column! Pick again...")
               continue
 
+            if row > 2 and column > 2:
+              print("Row and Columns go from 0-2! Pick again...")
+              continue
+
+
             if board[row][column] == "-":
-                add_symbol(symbol, [row, column])
-                display_board()
-                vertical = check_vertical(symbol)
-                horizontal = check_horizontal(symbol)
-                diagonal = check_diagonal(symbol)
-                is_full = check_full()
+              add_symbol(symbol, [row, column])
+              display_board()
+              vertical = check_vertical(symbol)
+              horizontal = check_horizontal(symbol)
+              diagonal = check_diagonal(symbol)
+              is_full = check_full()
 
-                print(diagonal)
+              if vertical or horizontal or diagonal:
+                print(player + " won!")
+                sys.exit()
+              elif is_full:
+                print("Nobody Won!")
+                sys.exit()
+              else:
+                break
 
-                if vertical or horizontal or diagonal:
-                  print(player + " won!")
-                  sys.exit()
-                elif is_full:
-                  print("Nobody Won!")
-                  sys.exit()
-                else:
-                  break
             else:
-                print("Your opponent has already picked this tile! Pick again...")
+              print("Your opponent has already picked this tile! Pick again...")
