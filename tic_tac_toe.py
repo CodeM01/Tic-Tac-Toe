@@ -17,7 +17,6 @@ def check_horizontal(symbol):
 
     return dictionary[0] or dictionary[1] or dictionary[2]
 
-
 def check_diagonal(symbol):
     left = right = True
 
